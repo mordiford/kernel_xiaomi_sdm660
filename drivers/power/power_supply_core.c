@@ -314,7 +314,13 @@ static int __power_supply_is_system_supplied(struct device *dev, void *data)
 	unsigned int *count = data;
 
 	(*count)++;
+
+#ifndef CONFIG_MACH_XIAOMI_TULIP
 	if (psy->desc->type != POWER_SUPPLY_TYPE_BATTERY)
+#else
+	if (psy->desc->type != POWER_SUPPLY_TYPE_BATTERY &&
+		psy->desc->type != POWER_SUPPLY_TYPE_BMS)
+#endif
 		if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_ONLINE,
 					&ret))
 			return ret.intval;
